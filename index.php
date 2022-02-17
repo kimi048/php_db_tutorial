@@ -1,0 +1,4 @@
+<?
+echo "db-basics";
+
+?>
