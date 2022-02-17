@@ -13,14 +13,23 @@ if(isset($_POST["user_email"]) && isset($_POST["user_password"])){
 
     // echo $email."<br>";
     // echo $password."<br>";
-    $DB = mysqli_connect($serverName, $serverUsername, $serverPassword);
-    if(!$DB){
-      die("Failed".mysqli_connect_error());
+
+    //initial way
+    // $DB = mysqli_connect($serverName, $serverUsername, $serverPassword);
+    // if(!$DB){
+    //   die("Failed".mysqli_connect_error());
+    // }else{
+    //   echo "success!!";
+    // }
+    // mysqli_close($DB);
+
+    //oop way
+    $DB = new mysqli($serverName, $serverUsername, $serverPassword);
+    if($DB->connect_error){
+      die("Failed".$DB->connect_error);
     }else{
       echo "success!!";
     }
-
-    mysqli_close($DB);
 
   }
 }
