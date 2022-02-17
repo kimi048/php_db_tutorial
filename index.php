@@ -3,33 +3,37 @@
 $serverName = "localhost";
 $serverUsername = "root";
 $serverPassword = "";
+$serverDB = "db_test";
 
 // echo "db-basics";
 if(isset($_POST["user_email"]) && isset($_POST["user_password"])){
   if(!empty($_POST["user_email"]) && !empty($_POST["user_password"])){
     // echo "user";
-    $email = $_POST["user_email"];
-    $password = $_POST["user_password"];
 
     // echo $email."<br>";
     // echo $password."<br>";
 
     //initial way
-    // $DB = mysqli_connect($serverName, $serverUsername, $serverPassword);
-    // if(!$DB){
-    //   die("Failed".mysqli_connect_error());
+    $DB = mysqli_connect($serverName, $serverUsername, $serverPassword, $serverDB);
+    if(!$DB){
+      die("Failed".mysqli_connect_error());
+    }else{
+      $email = $_POST["user_email"];
+      $password = $_POST["user_password"];
+      $query = "INSERT INTO users (user_email, user_password) VALUES ('$email', '$password');";
+      $result = mysqli_query($DB, $query);
+
+      echo "success!!";
+    }
+    mysqli_close($DB);
+
+    //oop way
+    // $DB = new mysqli($serverName, $serverUsername, $serverPassword);
+    // if($DB->connect_error){
+    //   die("Failed".$DB->connect_error);
     // }else{
     //   echo "success!!";
     // }
-    // mysqli_close($DB);
-
-    //oop way
-    $DB = new mysqli($serverName, $serverUsername, $serverPassword);
-    if($DB->connect_error){
-      die("Failed".$DB->connect_error);
-    }else{
-      echo "success!!";
-    }
 
   }
 }
