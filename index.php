@@ -1,9 +1,5 @@
 <?
-
-$serverName = "localhost";
-$serverUsername = "root";
-$serverPassword = "";
-$serverDB = "db_test";
+include "db.php";
 
 // echo "db-basics";
 if(isset($_POST["user_email"]) && isset($_POST["user_password"])){
@@ -14,7 +10,7 @@ if(isset($_POST["user_email"]) && isset($_POST["user_password"])){
     // echo $password."<br>";
 
     //initial way
-    $DB = mysqli_connect($serverName, $serverUsername, $serverPassword, $serverDB);
+    
     if(!$DB){
       die("Failed".mysqli_connect_error());
     }else{
