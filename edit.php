@@ -27,18 +27,25 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
   $password = $_POST["user_password"];
   $id = $_POST["id"];
 
-  $query = "UPDATE users SET ";
-  $query .= "user_email = '$email', ";
-  $query .= "user_password = '$password' ";
-  $query .= "WHERE id = $id";
-
-  $result = mysqli_query($DB, $query);
-  if(!$result){
-    die("FAILS REQUEST ".mysqli_error($DB));
+  if(isset($_POST["delete"])){
+    $query = "DELETE FROM users WHERE id = $id";
+    $result = mysqli_query($DB, $query);
+    if(!$result){
+      die("FAILED REQUEST".mysqli_error($DB));
+    }
   }else{
-    echo "SUCCESS";
-  }
+    $query = "UPDATE users SET ";
+    $query .= "user_email = '$email', ";
+    $query .= "user_password = '$password' ";
+    $query .= "WHERE id = $id";
 
+    $result = mysqli_query($DB, $query);
+    if(!$result){
+      die("FAILED REQUEST ".mysqli_error($DB));
+    }else{
+      echo "SUCCESS";
+    }
+  }
 }
 
 function getUsersId(){
@@ -84,6 +91,7 @@ function getUsersId(){
       </div>
       <input type="hidden" name="id" value="<?= $userid; ?>">
       <input type="submit" class="button-primary" value="submit">
+      <input type="submit" class="button-secondary" value="delete" name="delete">
     </form>
     <?php } ?>
   </body>
