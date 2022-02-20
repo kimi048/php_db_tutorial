@@ -1,7 +1,7 @@
 <?
 include "db.php";
 
-$username = "";
+$email = "";
 $password = "";
 $userid = "";
 $user = false;
@@ -11,7 +11,34 @@ if(isset($_GET["user_id"]) && !empty($_GET["user_id"])){
   $findUserQuery = "SELECT * FROM users WHERE id = '$user_id'";
   $result = mysqli_query($DB, $findUserQuery);
   $row = mysqli_fetch_assoc($result);
-  print_r($row);
+  // print_r($row);
+  $email = $row["user_email"];
+  $password = $row["user_password"];
+  $userid = $row["id"];
+  if($email && $password){
+    $user = true;
+  }else{
+    $user = false;
+  }
+}
+
+if($_SERVER['REQUEST_METHOD'] == 'POST'){
+  $email = $_POST["user_email"];
+  $password = $_POST["user_password"];
+  $id = $_POST["id"];
+
+  $query = "UPDATE users SET ";
+  $query .= "user_email = '$email', ";
+  $query .= "user_password = '$password' ";
+  $query .= "WHERE id = $id";
+
+  $result = mysqli_query($DB, $query);
+  if(!$result){
+    die("FAILS REQUEST ".mysqli_error($DB));
+  }else{
+    echo "SUCCESS";
+  }
+
 }
 
 function getUsersId(){
@@ -41,5 +68,23 @@ function getUsersId(){
       
       <input type="submit" class="button-primary" value="submit">
     </form>
+    <?php if($user){ ?>
+    <form method="POST">
+      <div class="row">
+        <div class="twelve columns">
+          <label for="email">Email</label>
+          <input type="text" placeholder="Enter your email" name="user_email" value="<?= $email; ?>">
+        </div>
+      </div>
+      <div class="row">
+        <div class="twelve columns">
+          <label for="password">Password</label>
+          <input type="password" placeholder="Enter your password" name="user_password" value="<?= $password; ?>">
+        </div>
+      </div>
+      <input type="hidden" name="id" value="<?= $userid; ?>">
+      <input type="submit" class="button-primary" value="submit">
+    </form>
+    <?php } ?>
   </body>
 </html>
